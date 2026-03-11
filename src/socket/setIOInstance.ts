@@ -1,4 +1,4 @@
-// G:\Projects\support.BDTravelSpirit.travel-express\src\socket\setIOInstance.ts  (express)
+// G:\Projects\bd-travel-spirit-express\src\socket\setIOInstance.ts
 import { Server as SocketIOServer } from "socket.io";
 
 declare global {

@@ -1,4 +1,4 @@
-// G:\Projects\support.BDTravelSpirit.travel-express\src\socket\socket.ts
+// G:\Projects\bd-travel-spirit-express\src\socket\socket.ts
 import { Server as SocketIOServer } from "socket.io";
 import http from "http";
 import { initializeSocket } from "../controllers/socketController";

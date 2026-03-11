@@ -1,4 +1,4 @@
-// G:\Projects\meeting-sync-express\src\services\socketUserMap.ts (express)
+// G:\Projects\bd-travel-spirit-express\src\services\socketUserMap.ts
 export { };
 
 declare global {

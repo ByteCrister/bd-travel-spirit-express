@@ -1,3 +1,4 @@
+// G:\Projects\bd-travel-spirit-express\src\controllers\socketController.ts
 import { Server, Socket } from "socket.io";  // express
 
 import { EMIT_SOCKET, SOCKET_NAMESPACES } from "../utils/constants";
@@ -7,11 +8,10 @@ let initialized = false;
 export function initializeSocket(io: Server) {
     if (initialized) return;
     initialized = true;
-    // /user-agent-chat Namespace
-    const userAgentChat = io.of(SOCKET_NAMESPACES.USER_AGENT_CHAT);
-    const websiteAgentNsp = io.of(SOCKET_NAMESPACES.WEBSITE_AGENT_CHAT);
+    // /user-chat Namespace
+    const USER_CHAT = io.of(SOCKET_NAMESPACES.USER_CHAT);
 
-    userAgentChat.on("connection", (socket: Socket) => {
+    USER_CHAT.on("connection", (socket: Socket) => {
         console.log("[CHAT/NOTIFICATION] Socket connected:", socket.id);
 
         socket.on(EMIT_SOCKET.REGISTER_USER, (data: { userId: string }) => {
