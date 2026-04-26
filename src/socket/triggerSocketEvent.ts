@@ -1,13 +1,13 @@
 // G:\Projects\support.BDTravelSpirit.travel-express\src\socket\triggerUserAgentSocketEvent.ts
 import { getUserSocketId } from "../services/socketUserMap";
-import { EMIT_USER_AGENT_CHAT, SOCKET_NAMESPACES } from "../utils/constants";
+import {  EmitUserAgentChatType, SocketNamespaceType } from "../utils/constants";
 import { getIOInstance } from "./setIOInstance";
 
 interface TriggerSocketParams {
     userId: string;
-    type: EMIT_USER_AGENT_CHAT;
+    type: EmitUserAgentChatType;
     data: unknown;
-    namespace: SOCKET_NAMESPACES;
+    namespace: SocketNamespaceType;
 }
 
 export const triggerSocketEvent = async ({

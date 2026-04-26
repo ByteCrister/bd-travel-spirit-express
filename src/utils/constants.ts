@@ -3,6 +3,8 @@ export enum EMIT_SOCKET {
     UNREGISTER_USER = 'UNREGISTER_USER',
 }
 
+export type EmitSocketType = `${EMIT_SOCKET}`;
+
 export enum EMIT_USER_AGENT_CHAT {
     SEND_NEW_CHAT_MESSAGE = 'SEND_NEW_CHAT_MESSAGE',
     DELETE_CHAT_MESSAGE = 'DELETE_CHAT_MESSAGE',
@@ -10,7 +12,11 @@ export enum EMIT_USER_AGENT_CHAT {
     MARK_AS_SEEN = 'MARK_AS_SEEN',
 }
 
+export type EmitUserAgentChatType = `${EMIT_USER_AGENT_CHAT}`;
+
 export enum SOCKET_NAMESPACES {
     USER_CHAT = '/user-chat',
     WEBSITE_AGENT_CHAT = '/website-chat'
 }
+
+export type SocketNamespaceType = `${SOCKET_NAMESPACES}`;
