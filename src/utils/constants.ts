@@ -15,8 +15,7 @@ export enum EMIT_USER_AGENT_CHAT {
 export type EmitUserAgentChatType = `${EMIT_USER_AGENT_CHAT}`;
 
 export enum SOCKET_NAMESPACES {
-    USER_CHAT = '/user-chat',
-    WEBSITE_AGENT_CHAT = '/website-chat'
+    USER_ONLINE = 'user-online',
 }
 
 export type SocketNamespaceType = `${SOCKET_NAMESPACES}`;

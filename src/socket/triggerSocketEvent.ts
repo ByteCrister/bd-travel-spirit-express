@@ -1,4 +1,4 @@
-// G:\Projects\support.BDTravelSpirit.travel-express\src\socket\triggerUserAgentSocketEvent.ts
+// G:\Projects\bd-travel-spirit-express\src\socket\triggerSocketEvent.ts
 import { getUserSocketId } from "../services/socketUserMap";
 import {  EmitUserAgentChatType, SocketNamespaceType } from "../utils/constants";
 import { getIOInstance } from "./setIOInstance";
@@ -33,6 +33,7 @@ export const triggerSocketEvent = async ({
 
     try {
         namespaceIo.to(socketId).emit(type, { userId, data });
+        console.log(`---------------- Socket event '${type}' sent to userId: ${userId} on namespace '${namespace}' ---------------`);
     } catch (err) {
         console.error("Error triggering socket event:", err);
     }

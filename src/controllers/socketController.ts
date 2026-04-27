@@ -8,14 +8,14 @@ let initialized = false;
 export function initializeSocket(io: Server) {
     if (initialized) return;
     initialized = true;
-    // /user-chat Namespace
-    const USER_CHAT = io.of(SOCKET_NAMESPACES.USER_CHAT);
+    // /user-online Namespace
+    const USER_ONLINE = io.of(SOCKET_NAMESPACES.USER_ONLINE);
 
-    USER_CHAT.on("connection", (socket: Socket) => {
-        console.log("[CHAT/NOTIFICATION] Socket connected:", socket.id);
+    USER_ONLINE.on("connection", (socket: Socket) => {
+        console.log("[USER_ONLINE] Socket connected:", socket.id);
 
         socket.on(EMIT_SOCKET.REGISTER_USER, (data: { userId: string }) => {
-            console.log(`[CHAT] User registered: ${data.userId}`);
+            console.log(`[USER_ONLINE] User registered: ${data.userId}`);
             registerUserSocket(data.userId, socket.id);
             socket.data.userId = data.userId;
         });
