@@ -1,6 +1,6 @@
 // G:\Projects\bd-travel-spirit-express\src\socket\triggerSocketEvent.ts
 import { getUserSocketId } from "../services/socketUserMap";
-import {  EmitUserAgentChatType, SocketNamespaceType } from "../utils/constants";
+import { EmitUserAgentChatType, SocketNamespaceType } from "../constants/constants";
 import { getIOInstance } from "./setIOInstance";
 
 interface TriggerSocketParams {

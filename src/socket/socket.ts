@@ -1,7 +1,7 @@
 // G:\Projects\bd-travel-spirit-express\src\socket\socket.ts
 import { Server as SocketIOServer } from "socket.io";
 import http from "http";
-import { initializeSocket } from "../controllers/socketController";
+import { initializeSocket } from "../config/socketInitializer";
 import { setIOInstance } from "./setIOInstance";
 
 export let io: SocketIOServer;

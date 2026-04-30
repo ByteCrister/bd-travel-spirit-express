@@ -14,6 +14,12 @@ export enum EMIT_USER_AGENT_CHAT {
 
 export type EmitUserAgentChatType = `${EMIT_USER_AGENT_CHAT}`;
 
+export enum LISTEN_SOCKET_AGET_EVENT {
+    USER_CONNECTED = 'USER_CONNECTED',
+    USER_DISCONNECTED = 'USER_DISCONNECTED',
+}
+export type ListenSocketAgentEventTypes = `${LISTEN_SOCKET_AGET_EVENT}`;
+
 export enum SOCKET_NAMESPACES {
     USER_ONLINE = 'user-online',
 }

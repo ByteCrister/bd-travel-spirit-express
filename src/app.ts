@@ -9,6 +9,7 @@ import { env } from "./config/env";
 import triggerUserAgentEventRouter from "./routes/trigger-socket-event.route";
 import socketUserMapRouter from "./routes/socketUserMap.route";
 import { initializeSocketServer } from "./socket/socket";
+import onlineAgentsRouter from "./routes/online-agents.route";
 
 const app = express();
 const server = http.createServer(app);
@@ -37,6 +38,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api", triggerUserAgentEventRouter);
 app.use("/api", socketUserMapRouter);
+app.use("/api", onlineAgentsRouter);
 
 app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
