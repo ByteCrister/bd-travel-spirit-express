@@ -68,7 +68,7 @@ export function initializeSocket(io: Server) {
                         };
 
                         // Broadcast to everyone ELSE in the room (sender won't get it)
-                        socket.to(room).emit(LISTEN_SOCKET_AGET_EVENT.USER_CONNECTED, {
+                        USER_ONLINE.in(room).emit(LISTEN_SOCKET_AGET_EVENT.USER_CONNECTED, {
                             data: agentPayload,
                         });
                     }
