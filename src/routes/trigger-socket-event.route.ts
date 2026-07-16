@@ -11,14 +11,14 @@ triggerSocketEventRouter.post("/trigger-socket-event", async (req, res) => {
         return res.status(403).json({ message: "Forbidden" });
     }
     // console.log(req.body);
-    const { userId, type, data, namespace } = req.body;
+    const { userId, ownerId, type, data, namespace } = req.body;
 
-    if (!userId || !type) {
-        return res.status(400).json({ message: "Missing required fields" });
+    if ((!userId && !ownerId) || !type) {
+        return res.status(400).json({ message: "Missing required fields: type and one of userId or ownerId" });
     }
 
     try {
-        triggerSocketEvent({ userId, type, data, namespace });
+        triggerSocketEvent({ userId, ownerId, type, data, namespace });
         return res.status(200).json({ success: true });
     } catch (err) {
         console.log("Error triggering socket event:", err);
@@ -26,4 +26,4 @@ triggerSocketEventRouter.post("/trigger-socket-event", async (req, res) => {
     }
 });
 
-export default triggerSocketEventRouter;
+export default triggerSocketEventRouter;
