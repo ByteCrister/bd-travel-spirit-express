@@ -39,9 +39,20 @@ const envSchema = z.object({
     .default("/socket.io")
     .describe("Socket.io path mount point"),
 
-  CLIENT_ORIGIN: z.string()
-    .url()
-    .describe("Allowed CORS origin for your frontend"),
+  CLIENT_ORIGIN: z
+    .string()
+    .describe("Comma-separated list of allowed CORS origins")
+    .transform((val) =>
+      val
+        .split(",")
+        .map((o) => o.trim())
+        .filter(Boolean)
+    )
+    .pipe(
+      z
+        .array(z.string().url({ message: "Each CLIENT_ORIGIN entry must be a valid URL" }))
+        .min(1, "At least one CLIENT_ORIGIN is required")
+    ),
 
   SOCKET_API_SECRET_KEY: z.string()
     .min(1)

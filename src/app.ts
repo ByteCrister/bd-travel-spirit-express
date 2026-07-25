@@ -21,7 +21,7 @@ app.use(helmet());
 
 app.use(
     cors({
-        origin: env.CLIENT_ORIGIN,
+        origin: env.CLIENT_ORIGIN,          // string[] — cors checks each request against the list
         methods: ["GET", "POST"],
         allowedHeaders: ["Content-Type", "Authorization", "x-api-key", "x-cron-secret"],
         credentials: true,

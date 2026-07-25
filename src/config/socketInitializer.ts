@@ -24,7 +24,6 @@ export function initializeSocket(io: Server) {
         socket.on(EMIT_SOCKET.REGISTER_USER, async (data: { userId: string; owner_id?: string }) => {
             try {
                 const { userId, owner_id } = data;
-                console.log(`[USER_ONLINE] User registered: ${userId}`);
 
                 // 1. Store in global map
                 registerUserSocket(userId, socket.id, owner_id);
@@ -35,7 +34,6 @@ export function initializeSocket(io: Server) {
                 if (owner_id) {
                     const room = `company_${owner_id}`;
                     socket.join(room);
-                    console.log(`${userId} joined room ${room}`);
 
                     // 3. Fetch user details to broadcast as Agent
                     const user = await UserModel.findOne({
@@ -56,14 +54,47 @@ export function initializeSocket(io: Server) {
                         .lean();
 
                     if (user) {
+                        const role = user.role as string;
                         const assetDoc = (user as any).avatar;
                         const avatarUrl = assetDoc?.file?.publicUrl ?? null;
+
+                        // ── Role-aware observability log ──────────────────────
+                        const roomSize = (await USER_ONLINE.in(room).fetchSockets()).length;
+                        const roleTag =
+                            role === USER_ROLE.ADMIN    ? "👑 ADMIN"     :
+                            role === USER_ROLE.SUPPORT  ? "🎧 SUPPORT"  :
+                            role === USER_ROLE.GUIDE    ? "🗺  GUIDE"    :
+                            role === USER_ROLE.ASSISTANT? "🤝 ASSISTANT" :
+                            `❓ ${role.toUpperCase()}`;
+
+                        console.log(
+                            `[USER_ONLINE] ${roleTag} registered` +
+                            ` | userId=${userId}` +
+                            ` | room=${room}` +
+                            ` | members_in_room=${roomSize}`
+                        );
+
+                        // Extra note when multiple admins share the same room
+                        if (role === USER_ROLE.ADMIN && roomSize > 1) {
+                            const adminCount = (await USER_ONLINE.in(room).fetchSockets())
+                                .filter(s => s.data?.role === USER_ROLE.ADMIN).length;
+                            if (adminCount > 0) {
+                                console.log(
+                                    `[USER_ONLINE] 👑 Multiple admins in room ${room}` +
+                                    ` (${adminCount + 1} admins online)`
+                                );
+                            }
+                        }
+                        // ─────────────────────────────────────────────────────
+
+                        // Store role on socket.data for use in disconnect
+                        socket.data.role = role;
 
                         const agentPayload = {
                             id: user._id.toString(),
                             name: user.name,
                             email: user.email,
-                            role: user.role,
+                            role,
                             avatar: avatarUrl,
                         };
 
@@ -72,6 +103,9 @@ export function initializeSocket(io: Server) {
                             data: agentPayload,
                         });
                     }
+                } else {
+                    // User has no company affiliation (e.g. traveler)
+                    console.log(`[USER_ONLINE] 🌐 User registered without room | userId=${userId}`);
                 }
             } catch (err) {
                 console.error("Error handling REGISTER_USER:", err);
@@ -80,19 +114,38 @@ export function initializeSocket(io: Server) {
 
         // Handle disconnect
         socket.on("disconnect", async (reason) => {
-            const userId = socket.data.userId;
+            const userId   = socket.data.userId;
             const owner_id = socket.data.owner_id;
-            console.log(`[USER_ONLINE] Socket disconnected: ${socket.id}, userId: ${userId}`);
+            const role     = socket.data.role as string | undefined;
 
             if (userId) {
                 removeUserByUserId(userId);
 
-                // If the user was part of a company, notify the room
                 if (owner_id) {
                     const room = `company_${owner_id}`;
+                    const roleTag =
+                        role === USER_ROLE.ADMIN    ? "👑 ADMIN"     :
+                        role === USER_ROLE.SUPPORT  ? "🎧 SUPPORT"  :
+                        role === USER_ROLE.GUIDE    ? "🗺  GUIDE"    :
+                        role === USER_ROLE.ASSISTANT? "🤝 ASSISTANT" :
+                        role ? `❓ ${role.toUpperCase()}` : "UNKNOWN";
+
+                    console.log(
+                        `[USER_ONLINE] ${roleTag} disconnected` +
+                        ` | userId=${userId}` +
+                        ` | room=${room}` +
+                        ` | reason=${reason}`
+                    );
+
                     USER_ONLINE.to(room).emit(LISTEN_SOCKET_AGET_EVENT.USER_DISCONNECTED, {
                         userId,
                     });
+                } else {
+                    console.log(
+                        `[USER_ONLINE] 🌐 User disconnected (no room)` +
+                        ` | userId=${userId}` +
+                        ` | reason=${reason}`
+                    );
                 }
             }
         });
@@ -102,4 +155,4 @@ export function initializeSocket(io: Server) {
     });
 
     // ... other namespaces
-}
+}
